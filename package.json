@@ -4,12 +4,15 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "axios": "^0.22.0",
     "body-parser": "^1.19.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "node-fetch": "^3.0.0",
+    "redis": "^3.1.2"
   },
   "devDependencies": {},
   "scripts": {
-    "start":"nodemon index.js",
+    "start": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -21,5 +24,6 @@
   "bugs": {
     "url": "https://github.com/chouhanviky9/redis_node/issues"
   },
-  "homepage": "https://github.com/chouhanviky9/redis_node#readme"
+  "homepage": "https://github.com/chouhanviky9/redis_node#readme",
+  "type": "commonjs"
 }
