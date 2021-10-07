@@ -24,7 +24,6 @@ client.on("error", function(error) {
   client.del("name",redis.print);
   client.get("name",redis.print);
 //   client.lpush("map","one");
-
   client.lrange("map",0,-1,redis.print);
   client.hset("hashset","nook","kiiaa",redis.print);
   client.hdel("hashset","nook","kiiaa");
@@ -37,8 +36,8 @@ client.on("error", function(error) {
   });
   client.llen("map",redis.print);
   client.lindex("map",5,redis.print);
-  client.ltrim("map",0,1,redis.print);
-
+//   client.ltrim("map",0,1,redis.print);
+  client.hsetnx("hashset","nooki",1,redis.print);
 
 
 const app = express();
