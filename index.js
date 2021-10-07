@@ -14,7 +14,18 @@ const client = redis.createClient({
 client.on("error", function(error) {
     console.error(error);
   });
+
   
+  client.set("name","vikas");
+  client.get("name",redis.print);
+  client.exists("chouhanvi",redis.print);
+  client.get("chouhanviky9",redis.print);
+  client.incr("chouhanviky9",redis.print);
+  client.del("name",redis.print);
+  client.get("name",redis.print);
+
+
+
 
 const app = express();
 
