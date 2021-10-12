@@ -3,11 +3,10 @@ const redis = require("redis");
 const cache = require("../services/cache");
 let admin = {};
 
+//operations on strings and number
 admin.set = async (req, res, next) => {
     try {
-        let key = req.query.key;
-        let value = req.query.value;
-        let response = await cache.setCache(key, value, console.log("ok"));
+        let response = await cache.setCache(req.query.key, req.query.value, console.log("ok"));
         res.send(response);
     } catch (err) {
         res.status(500).send(err);
@@ -16,8 +15,7 @@ admin.set = async (req, res, next) => {
 
 admin.get = async (req, res, next) => {
     try {
-        let key = req.query.key;
-        let response = await cache.getCache(key);
+        let response = await cache.getCache(req.query.key);
         res.send(response);
         res.send(response);
     } catch (err) {
@@ -27,8 +25,7 @@ admin.get = async (req, res, next) => {
 
 admin.delete = async (req, res, next) => {
     try {
-        let key = req.query.key;
-        let response = await cache.deleteCache(key);
+        let response = await cache.deleteCache(req.query.key);
         res.send(`${response}`);
         res.send(response);
     } catch (err) {
@@ -38,10 +35,7 @@ admin.delete = async (req, res, next) => {
 
 admin.getRange = async (req, res, next) => {
     try {
-        let key = req.query.key;
-        let start = req.query.start;
-        let end = req.query.end;
-        let response = await cache.RangeCache(key, start, end);
+        let response = await cache.RangeCache(req.query.key, req.query.start, req.query.end);
         res.send(response);
     } catch (err) {
         res.status(500).send(err);
@@ -50,21 +44,24 @@ admin.getRange = async (req, res, next) => {
 
 admin.getSet = async (req, res, next) => {
     try {
-        let key = req.query.key;
-        let value = req.query.value;
-        let response = await cache.getSet(key, value);
+        let response = await cache.getSet(req.query.key, req.query.value);
         res.send(response);
     } catch (err) {
         res.status(500).send(err);
     }
 };
-
+admin.type =async (req, res, next) => {
+    try {
+        let response = await cache.type(req.query.key);
+        res.send(response);
+    } catch (err) {
+        res.status(500).send(err);
+    }
+};
 //didnt get completely
 admin.getBitAt = async (req, res, next) => {
     try {
-        let key = req.query.key;
-        let offset = req.query.offset;
-        let response = await cache.getSet(key, offset);
+        let response = await cache.getSet(req.query.key, req.query.offset);
         res.send(response);
     } catch (err) {
         res.status(500).send(err);
@@ -73,9 +70,81 @@ admin.getBitAt = async (req, res, next) => {
 
 admin.getMany = async (req, res, next) => {
     try {
-        let keys = req.query.keys;
-        let response = await cache.getMany(keys);
+        let response = await cache.getMany(req.query.keys);
         res.send(response);
+    } catch (err) {
+        res.status(500).send(err);
+    }
+};
+//lists
+admin.lPush = async (req, res, next) => {
+    try {
+        let response = await cache.lPush(req.query.name, req.query.value);
+        res.send(`${response}`);
+    } catch (err) {
+        res.status(500).send(err);
+    }
+};
+
+admin.lSet = async (req, res, next) => {
+    try {
+        let response = await cache.lSet(req.query.name, req.query.key, req.query.value);
+        res.send(`${response}`);
+    } catch (err) {
+        res.status(500).send(err);
+    }
+};
+
+admin.lPushX = async (req, res, next) => {
+    try {
+        let response = await cache.lPushX(req.query.name, req.query.value);
+        res.send(`${response}`);
+    } catch (err) {
+        res.status(500).send(err);
+    }
+};
+
+admin.rPush = async (req, res, next) => {
+    try {
+        let response = await cache.rPush(req.query.name, req.query.value);
+        res.send(`${response}`);
+    } catch (err) {
+        res.status(500).send(err);
+    }
+};
+
+admin.rPushX = async (req, res, next) => {
+    try {
+        let response = await cache.rPushX(req.query.name, req.query.value);
+        res.send(`${response}`);
+    } catch (err) {
+        res.status(500).send(err);
+    }
+};
+
+admin.lRange = async (req, res, next) => {
+    try {
+        let response = await cache.lRange(req.query.name, req.query.start, req.query.end);
+        res.send(`${response}`);
+    } catch (err) {
+        res.status(500).send(err);
+    }
+};
+
+admin.lRemove = async (req, res, next) => {
+    try {
+        let count = req.query.count ? req.query.count : 1;
+        let response = await cache.lRemove(req.query.name, count, req.query.value);
+        res.send(`${response}`);
+    } catch (err) {
+        res.status(500).send(err);
+    }
+};
+
+admin.lPop = async (req, res, next) => {
+    try {
+        let response = await cache.lPop(req.query.name);
+        res.send(`${response}`);
     } catch (err) {
         res.status(500).send(err);
     }
@@ -85,10 +154,7 @@ admin.getMany = async (req, res, next) => {
 
 admin.hSet = async (req, res, next) => {
     try {
-        let name = req.query.name;
-        let key = req.query.key;
-        let value = req.query.value;
-        let response = await cache.hSet(name, key, value);
+        let response = await cache.hSet(req.query.name, req.query.key, req.query.value);
         res.send(`${response}`);
     } catch (err) {
         res.status(500).send(err);
@@ -97,9 +163,7 @@ admin.hSet = async (req, res, next) => {
 
 admin.hGet = async (req, res, next) => {
     try {
-        let name = req.query.name;
-        let key = req.query.key;
-        let response = await cache.hGet(name, key);
+        let response = await cache.hGet(req.query.name, req.query.key);
         res.send(`${response}`);
     } catch (err) {
         res.status(500).send(err);
@@ -108,9 +172,7 @@ admin.hGet = async (req, res, next) => {
 
 admin.hDel = async (req, res, next) => {
     try {
-        let name = req.query.name;
-        let key = req.query.key;
-        let response = await cache.hDel(name, key);
+        let response = await cache.hDel(req.query.name, req.query.key);
         res.send(`${response}`);
     } catch (err) {
         res.status(500).send(err);
@@ -119,9 +181,7 @@ admin.hDel = async (req, res, next) => {
 
 admin.hVals = async (req, res, next) => {
     try {
-        let name = req.query.name;
-        let value = req.query.value;
-        let response = await cache.SADD(name, value);
+        let response = await cache.SADD(req.query.namee, req.query.value);
         res.send(`${response}`);
     } catch (err) {
         res.status(500).send(err);
@@ -132,9 +192,7 @@ admin.hVals = async (req, res, next) => {
 
 admin.SADD = async (req, res, next) => {
     try {
-        let name = req.query.name;
-        let value = req.query.value;
-        let response = await cache.SADD(name, value);
+        let response = await cache.SADD(req.query.name, req.query.value);
         res.send(`${response}`);
     } catch (err) {
         res.status(500).send(err);
@@ -143,34 +201,74 @@ admin.SADD = async (req, res, next) => {
 
 admin.SREM = async (req, res, next) => {
     try {
-        let name = req.query.name;
-        let value = req.query.value;
-        let response = await cache.SREM(name, value);
+        let response = await cache.SREM(req.query.name, req.query.value);
         res.send(`${response}`);
     } catch (err) {
         res.status(500).send(err);
     }
 };
 
-admin.SCARD= async (req, res, next) => {
+admin.SCARD = async (req, res, next) => {
     try {
-        let name = req.query.name;
-        let response = await cache.SCARD(name);
+        let response = await cache.SCARD(req.query.name);
         res.send(`${response}`);
     } catch (err) {
         res.status(500).send(err);
     }
-}
-admin.SDIFF= async (req, res, next) => {
+};
+
+admin.SMEMBERS = async (req, res, next) => {
     try {
-        let name1= req.query.name1;
-        let name2= req.query.name2;
-        let response = await cache.SDIFF(name1,name2);
+        let response = await cache.SMembers(req.query.name);
         res.send(`${response}`);
     } catch (err) {
         res.status(500).send(err);
     }
-}
+};
+
+admin.SDIFF = async (req, res, next) => {
+    try {
+        let response = await cache.SDIFF(req.query.names);
+        res.send(`${response}`);
+    } catch (err) {
+        res.status(500).send(err);
+    }
+};
+
+admin.SINTER = async (req, res, next) => {
+    try {
+        let response = await cache.SINTER(...req.query.names);
+        res.send(`${response}`);
+    } catch (err) {
+        res.status(500).send(err);
+    }
+};
+admin.SISMEMBER = async (req, res, next) => {
+    try {
+        let response = await cache.SISMEMBER(req.query.name, req.query.key);
+        res.send(`${response}`);
+    } catch (err) {
+        res.status(500).send(err);
+    }
+};
+
+admin.SRANDOM = async (req, res, next) => {
+    try {
+        let response = await cache.SRANDOM(req.query.name);
+        res.send(`${response}`);
+    } catch (err) {
+        res.status(500).send(err);
+    }
+};
+
+admin.SUNIONSTORE = async (req, res, next) => {
+    try {
+        let response = await cache.SUNIONSTORE(req.query.names, req.query.name1, req.query.name2);
+        res.send(`${response}`);
+    } catch (err) {
+        res.status(500).send(err);
+    }
+};
 
 module.exports = {
     admin

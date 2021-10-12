@@ -1,3 +1,4 @@
+const req = require("express/lib/request");
 const redis = require("redis");
 
 const REDIS_PORT = process.env.REDIS_PORT || 6379;
@@ -10,7 +11,7 @@ const client = redis.createClient({
 let cache={};
 
 // operations normal string data type 
-// cache.set('name', 'haiVikas');
+//operations on strings and number
 
 cache.setCache=(key,value)=>{
     return new Promise((resolve,reject)=>{
@@ -88,6 +89,103 @@ cache.getMany=(keys)=>{
     })
 }
 
+cache.type=(key)=>{
+    return new Promise((resolve,reject)=>{
+        client.type(key,(err,reply)=>{
+            if(err){
+                resolve(err);
+            }
+            resolve(reply);
+        })
+    })
+}
+//redis list
+cache.lPush= (name,value) => {
+    return new Promise((resolve,reject)=>{
+        client.lpush(name,value,(err,reply)=>{
+            if(err){
+                resolve(err);
+            }
+            resolve(reply);
+        })
+    })
+}
+
+cache.lSet=(name,key,value)=>{
+    return new Promise((resolve,reject)=>{
+        client.lset(name,key,value,(err,reply)=>{
+            if(err){
+                resolve(err);
+            }
+            resolve(reply);
+        })
+    })
+}
+cache.lPushX= (name,value) => {
+    return new Promise((resolve,reject)=>{
+        client.lpushx(name,value,(err,reply)=>{
+            if(err){
+                resolve(err);
+            }
+            resolve(reply);
+        })
+    })
+}
+
+cache.rPush= (name,value) => {
+    return new Promise((resolve,reject)=>{
+        client.rpush(name,value,(err,reply)=>{
+            if(err){
+                resolve(err);
+            }
+            resolve(reply);
+        })
+    })
+}
+
+cache.rPushX= (name,value) => {
+    return new Promise((resolve,reject)=>{
+        client.rpushx(name,value,(err,reply)=>{
+            if(err){
+                resolve(err);
+            }
+            resolve(reply);
+        })
+    })
+}
+
+cache.lRange= (name,start,end) => {
+    return new Promise((resolve,reject)=>{
+        client.lrange(name,start,end,(err,reply)=>{
+            if(err){
+                resolve(err);
+            }
+            resolve(reply);
+        })
+    })
+}
+
+cache.lRemove= (name,count,value) => {
+    return new Promise((resolve,reject)=>{
+        client.lrem(name,count,value,(err,reply)=>{
+            if(err){
+                resolve(err);
+            }
+            resolve(reply);
+        })
+    })
+}
+
+cache.lPop= (name) => {
+    return new Promise((resolve,reject)=>{
+        client.lpop(name,(err,reply)=>{
+            if(err){
+                resolve(err);
+            }
+            resolve(reply);
+        })
+    })
+}
 //redis hashes 
 
 cache.hSet=(name,key,value)=>{
@@ -159,7 +257,7 @@ cache.SREM=(name,value)=>{
 
 cache.SMembers=(name)=>{
     return new Promise((resolve,reject)=>{
-        client.SREM(name,(err,reply)=>{
+        client.SMEMBERS(name,(err,reply)=>{
             if(err){
                 resolve(err);
             }
@@ -179,9 +277,9 @@ cache.SCARD=(name)=>{
     })
 }
 
-cache.SDIFF=(name1,name2)=>{
+cache.SDIFF=(a,b)=>{
     return new Promise((resolve,reject)=>{
-        client.SDIFF(name1,name2,(err,reply)=>{
+        client.SDIFF(a,b,(err,reply)=>{
             if(err){
                 resolve(err);
             }
@@ -190,6 +288,49 @@ cache.SDIFF=(name1,name2)=>{
     })
 }
 
+cache.SINTER=(a,b)=>{
+    return new Promise((resolve,reject)=>{
+        client.SINTER(a,b,(err,reply)=>{
+            if(err){
+                resolve(err);
+            }
+            resolve(reply);
+        })
+    })
+}
+
+cache.SISMEMBER=(name,key)=>{
+    return new Promise((resolve,reject)=>{
+        client.SISMEMBER(name,key,(err,reply)=>{
+            if(err){
+                resolve(err);
+            }
+            resolve(reply);
+        })
+    })
+}
+
+cache.SRANDOM=(name)=>{
+    return new Promise((resolve,reject)=>{
+        client.SRANDMEMBER(name,(err,reply)=>{
+            if(err){
+                resolve(err);
+            }
+            resolve(reply);
+        })
+    })
+}
+
+cache.SUNIONSTORE=(name,name1,name2)=>{
+    return new Promise((resolve,reject)=>{
+        client.SUNIONSTORE(name,name1,name2,(err,reply)=>{
+            if(err){
+                resolve(err);
+            }
+            resolve(reply);
+        })
+    })
+}
 
 
 

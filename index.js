@@ -55,10 +55,9 @@ const PORT = process.env.PORT || 5000;
 // app.get(`/repos/:username`,getRepos);
 app.use('/api',apiRouter);
 
-
-
 app.listen(PORT, () => {
     console.log('***************************************');
     console.log(`listening on port ${PORT}`);
     console.log('***************************************');
 });
+
